@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Redirect</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #00a651;
+            --primary-hover: #008c44;
+            --bg: #f0f4f8;
+            --text: #2d3748;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, #e2e8f0 0%, #f7fafc 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            color: var(--text);
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.82);
+            backdrop-filter: blur(12px);
+            padding: 2rem;
+            border-radius: 28px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 900px;
+            width: 95%;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        /* Thêm style cho dòng text hiển thị từ GET */
+        #displayText {
+            color: var(--primary);
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        p {
+            color: #4a5568;
+            margin-bottom: 20px;
+        }
+
+        .btn-pay {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 14px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 14px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .btn-pay:hover {
+            background: var(--primary-hover);
+        }
+
+        iframe {
+            width: 100%;
+            height: 650px;
+            border: none;
+            margin-top: 20px;
+            border-radius: 16px;
+            background: white;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .08);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="card">
+        <h1>Thanh toán</h1>
+        <div id="displayText"></div>
+        <p>Hệ thống sẽ load trang thanh toán bên dưới</p>
+        <form method="post" id="paymentForm" name="payAtAllFormPay" action="https://cspage.counterservicepay.co/"
+            target="payFrame"><input type="hidden" name="paymentData" id="paymentDataInput" value=""><button
+                type="submit" class="btn-pay"> Thanh toán ngay </button></form><iframe name="payFrame"
+            id="payFrame"></iframe>
+    </div>
+    <script>
+        window.onload = function () {
+            const urlParams = new URLSearchParams(window.location.search);
+            const getPaymentData = urlParams.get('paymentData');
+            const getText = urlParams.get('text');
+            if (getText) {
+                document.getElementById('displayText').innerText = getText;
+            }
+            if (getPaymentData) {
+                document.getElementById('paymentDataInput').value = getPaymentData;
+            }
+            setTimeout(function () {
+                if (document.getElementById('paymentDataInput').value !== "") {
+                    document.getElementById("paymentForm").submit();
+                } else {
+                    console.log("Không có dữ liệu paymentData để submit.");
+                }
+            }, 1500);
+        }
+    </script>
+</body>
+
+</html>
